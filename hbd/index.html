@@ -99,6 +99,26 @@
       #bunny-gif:hover {
         animation: bounce 1s infinite;
       }
+
+      /* Style untuk pesan akhir */
+      #final-message {
+        display: none; /* Awalnya tersembunyi, muncul saat expl() */
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      #envelope-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 50px;
+        color: #ff6b6b; /* Warna merah muda lucu */
+        transition: transform 0.3s ease;
+      }
+
+      #envelope-button:hover {
+        transform: scale(1.1);
+      }
     </style>
   </head>
   <body>
@@ -120,28 +140,28 @@
       <div id="birthday-animation">
         <img
           id="cake-gif"
-          src="https://media.giphy.com/media/3o7TKz9bX9Z8LxQ8Qo/giphy.gif"
+          src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3RtdXJqMjJscjVmMGw4YXpoZmJnb3U2OG16N3cxNWUwOHdwbDNzMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/wGKrkvHxZT6PVpw635/giphy.gif"
           alt="Kue ulang tahun dengan lilin menyala"
         />
         <br />
-        <img
-          id="bunny-gif"
-          src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif"
-          alt="Kelinci meniup lilin"
-        />
+      </div>
+
+      <!-- Pesan akhir dengan amplop yang bisa diklik -->
+      <div id="final-message">
+        <button id="envelope-button" onclick="openEnvelope()">✉️</button>
+        <p style="margin-top: 10px; font-size: 18px; color: #333">
+          Klik amplop ini sayanggku!
+        </p>
       </div>
     </div>
 
-    <!-- Elemen audio untuk musik Happy Birthday, tanpa kontrol terlihat, langsung autoplay dan loop -->
+    <!-- Elemen audio untuk musik Happy Birthday dari file lokal yang diupload, tanpa kontrol terlihat, langsung autoplay dan loop -->
     <audio id="birthday-song" loop autoplay preload="auto">
-      <!-- Menggunakan URL MP3 yang lebih akurat berdasarkan pola lesfm.net -->
-      <!-- Jika tidak bekerja, download file MP3 dari https://lesfm.net/id/track/happy-birthday-girl dan upload ke server gratis (misal GitHub atau Dropbox), lalu ganti URL di sini -->
-      <source
-        src="https://lesfm.net/mp3/happy-birthday-girl.mp3"
-        type="audio/mpeg"
-      />
-      <!-- Fallback: Jika URL di atas tidak bekerja, gunakan URL alternatif atau upload sendiri -->
-      <!-- Contoh alternatif: <source src="https://www.soundjay.com/misc/sounds/happy-birthday-song.mp3" type="audio/mpeg"> -->
+      <!-- Ganti URL di bawah ini dengan URL file MP3 yang Anda upload ke server online -->
+      <!-- Contoh: Jika upload ke GitHub, URL akan seperti https://raw.githubusercontent.com/username/repo/main/hbd.mp3 -->
+      <!-- Jika upload ke Dropbox, gunakan link share dan ubah menjadi https://dl.dropboxusercontent.com/s/.../hbd.mp3 -->
+      <source src="/source/media/hbd.mp3" type="audio/mpeg" />
+      <!-- Fallback: Jika URL di atas tidak bekerja, gunakan URL alternatif -->
       Browser Anda tidak mendukung elemen audio.
     </audio>
 
@@ -225,7 +245,7 @@
           if (warna2) {
             await swals.fire(
               "Okeee bub!",
-              `Sekarang lihat ini ya &#10084;&#65039;`
+              `Sekarang lihat ini yaa &#10084;&#65039;`
             );
             document.getElementById("koteks").style.display = "block";
             // Menghapus referensi ke elemen yang tidak ada (#tombWA) untuk menghindari error
@@ -258,7 +278,7 @@
           if (warna2) {
             await swals.fire(
               "Okeee bub!",
-              `Sekarang lihat ini ya &#10084;&#65039;`
+              `Sekarang lihat ini yaa &#10084;&#65039;`
             );
             document.getElementById("koteks").style.display = "block";
             // document.getElementById("tombWA").style.display = "block";
@@ -266,7 +286,7 @@
             StartMarquee();
           } else {
             await swals.fire(
-              "Oke, memilih Biru!",
+              "Oke, pilihh Biru!",
               "Sama aja sih sebenernya, cuma kalo Biru traktirinnya harus lebih banyak yaa &#129315;"
             );
             document.getElementById("koteks").style.display = "block";
@@ -283,10 +303,47 @@
         document.getElementById("fotoloveu").style.opacity = "1";
         // Tampilkan animasi kue dan kelinci saat bagian ini muncul
         document.getElementById("birthday-animation").style.display = "block";
+        // Tampilkan pesan akhir setelah animasi
+        document.getElementById("final-message").style.display = "block";
       }
 
       function StartMarquee() {
         document.getElementById("marq").start();
+      }
+
+      // Fungsi untuk membuka amplop dan menampilkan pesan
+      async function openEnvelope() {
+        const swals = Swal.mixin({
+          backdrop: "rgba(168, 230, 207, 0.4)",
+          confirmButtonColor: "#FF6B6B",
+          allowOutsideClick: false,
+        });
+
+        // Tampilkan amplop terlebih dahulu
+        await swals.fire({
+          title: "Love Message",
+          html: '<img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Amplop" style="width: 100px; height: auto;" />', // GIF amplop sederhana, bisa ganti dengan gambar amplop statis jika perlu
+          confirmButtonText: "Open",
+        });
+
+        // Setelah klik "Buka Amplop", tampilkan pesan di dalam kotak surat
+        await swals.fire({
+          title: "🎉 Happy Birthday, My Lvrzy 💞",
+          html: `
+                    <div style="text-align: left; font-size: 16px; line-height: 1.6; color: #333; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                        Terima kasih ya udah hadir di hidup aku. Kamu itu bukan cuma orang yang aku sayangg, tapi juga tmpat aku bisa jadi diri sendiri sepenuhnya. Rasanya baru kali ini aku jatuh cinta yang sebenar-benarnya, bukan cuma karena kamu manis, tapi karena sama kamu aku bisa cerita semuanya, tanpa takut dihakimi, tanpa harus pura-pura kuat.<br><br>
+                        Aku tahu kadang kamu masih sedikit tertutup, masih simpan hal-hal kecil sendirian, tapi aku harap perlahan kamu mau berbagi juga, kayak aku yang pelan-pelan belajar buat terbuka. Aku gak minta kamu berubah, cukup biarin aku di sisimu, nemenin kamu, sekecil apa pun caranya, okee sayangg ajak aku ke duniamu.<br><br>
+                        Jatuh cinta sama kamu tuh beda. Bukan yang heboh, tapi hangat, kayak rumah setelah hari panjang.<br><br>
+                        Jadi..... selamat ulang tahun, sayangg. Terima kasih udah jadi rumah yang paling nyaman buat hatiku.<br><br>
+                        I love you, today and always. 💞<br><br>
+                        
+                        With Love <br><br>
+                        Mr. Alfarisi<br><br>
+                    </div>
+                `,
+          confirmButtonText: "Tutup",
+          width: "600px", // Lebar modal agar pesan terlihat rapi
+        });
       }
     </script>
   </body>
